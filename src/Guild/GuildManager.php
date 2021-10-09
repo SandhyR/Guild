@@ -63,7 +63,7 @@ class GuildManager{
         $this->plugin->getDatabase()->query("UPDATE playerguild SET guildrank='Member' WHERE playername='$playername'");
     }
 
-    public function kickmember(Player $kicker, Player $player){
+    public function kickmember(Player $kicker, string $player){
        $playername = $player;
         if($this->plugin->getPlayerManager()->getPlayerRank($kicker) == "LEADER"){
             $playername = $player;
