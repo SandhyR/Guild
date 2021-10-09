@@ -358,7 +358,12 @@ class FormManager
                     $this->createguildform($player);
                     break;
                 case 1:
-                    $this->accinvite($player);
+                    $playername = $player->getName();
+                   if($this->plugin->getDatabase()->query("SELECT playername FROM playerguild WHERE playername='$playername' AND guildrank='Inviting'")->fetch_row() !== null) {
+                        $this->accinvite($player);
+                    } else{
+                        $player->sendMessage("You dont have invite guild");
+                    }
                     break;
             }
             return false;
