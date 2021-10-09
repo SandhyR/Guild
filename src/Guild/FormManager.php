@@ -143,7 +143,7 @@ class FormManager
             if ($result === null) {
                 return true;
             }
-            $players = $this->plugin->getServer()->getPlayerExact($this->members[$result]);
+            $players = $this->members[$result];
             $this->plugin->getGuildManager()->kickmember($player, $players);
             unset($this->members[$player->getName()]);
             return false;
