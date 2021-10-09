@@ -64,25 +64,24 @@ class GuildManager{
     }
 
     public function kickmember(Player $kicker, Player $player){
-        $playername = $player->getName();
+       $playername = $player;
         if($this->plugin->getPlayerManager()->getPlayerRank($kicker) == "LEADER"){
-            if($player->isOnline()){
-                $playername = $player->getName();
-                $guildname = $this->plugin->getPlayerManager()->getGuildName($player);
-                $member = $this->plugin->getGuildManager()->getGuildCount($guildname);
-                $this->plugin->getDatabase()->query("DELETE FROM playerguild WHERE username='$playername'");
-                $this->plugin->getDatabase()->query("UPDATE guildinfo SET memberguild=$member - 1 WHERE guildname='$guildname'");
-                $this->plugin->getGuildAPI()->sendCustomMessage("$playername has been kicked by {$kicker->getName()}", $this->plugin->getPlayerManager()->getGuildName($player));
+            $playername = $player;
+            $guildname = $this->plugin->getDatabase()->query("SELECT guildname FROM playerguild WHERE playername='$playername'")->fetch_row();
+            $member = $this->plugin->getGuildManager()->getGuildCount($guildname[0]);
+            $this->plugin->getDatabase()->query("DELETE FROM playerguild WHERE username='$playername'");
+            $this->plugin->getDatabase()->query("UPDATE guildinfo SET memberguild=$member - 1 WHERE guildname='$guildname'");
+            $this->plugin->getGuildAPI()->sendCustomMessage("$playername has been kicked by {$kicker->getName()}", $this->plugin->getPlayerManager()->getGuildName($kicker));
                 return true;
-            }
         } elseif ($this->plugin->getPlayerManager()->getPlayerRank($kicker) == "OFFICER"){
-            if($this->plugin->getPlayerManager()->getPlayerRank($player) !== "OFFICER"){
-                $playername = $player->getName();
-                $guildname = $this->plugin->getPlayerManager()->getGuildName($player);
-                $member = $this->plugin->getGuildManager()->getGuildCount($guildname);
+            $rank = $this->plugin->getDatabase()->query("SELECT guilrank FROM playerguild WHERE playername='$playername'")->fetch_row();
+            if(strtoupper($rank[0]) !== "OFFICER"){
+                $playername = $player;
+                $guildname = $this->plugin->getDatabase()->query("SELECT guildname FROM playerguild WHERE playername='$playername'");
+                $member = $this->plugin->getGuildManager()->getGuildCount($guildname[0]);
                 $this->plugin->getDatabase()->query("DELETE FROM playerguild WHERE username='$playername'");
                 $this->plugin->getDatabase()->query("UPDATE guildinfo SET memberguild=$member - 1 WHERE guildname='$guildname'");
-                $this->plugin->getGuildAPI()->sendCustomMessage("$playername has been kicked by {$kicker->getName()}", $this->plugin->getPlayerManager()->getGuildName($player));
+                $this->plugin->getGuildAPI()->sendCustomMessage("$playername has been kicked by {$kicker->getName()}", $this->plugin->getPlayerManager()->getGuildName($kicker));
                 return true;
             }
         }
