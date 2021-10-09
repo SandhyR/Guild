@@ -27,7 +27,7 @@ class GuildChat extends Command{
                     $player = $this->plugin->getServer()->getPlayerExact($p);
                     if ($player->isOnline()) {
                         $chat = implode(" ", $args);
-                        $player->sendMessage("GUILD > $chat");
+                        $this->plugin->getGuildAPI()->sendMessageGuild($sender, $chat);
                     }
                 }
             }
