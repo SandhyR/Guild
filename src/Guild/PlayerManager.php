@@ -42,7 +42,10 @@ class PlayerManager{
     public function getGuildName(Player $player){
         $playername = $player->getName();
         $name = $this->plugin->getDatabase()->query("SELECT guildname FROM playerguild WHERE playername='$playername'")->fetch_row();
-        return $name[0];
+        if(isset($name[0])){
+            return $name[0];
+        }
+        return "";
     }
 
     public function leaveguild(Player $player){
