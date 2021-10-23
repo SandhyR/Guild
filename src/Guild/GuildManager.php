@@ -100,7 +100,7 @@ class GuildManager{
                 $guildname = $this->plugin->getPlayerManager()->getGuildName($inviter);
                 $player->sendMessage("You are invited by {$inviter->getName()} to guild $guildname");
                 $this->plugin->getGuildAPI()->sendCustomMessage("{$inviter->getName()} Invited $playername", $guildname);
-                $this->plugin->getDatabase()->query("INSERT INTO playerguild VALUES(null, $playername, '$guildname', 'Inviting')");
+                $this->plugin->getDatabase()->query("INSERT INTO playerguild VALUES(null, '$playername', '$guildname', 'Inviting')");
                 return true;
             }
         }
